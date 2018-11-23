@@ -13,6 +13,7 @@ public class MqttSampleClient implements IMqttMessageListener{
     private final Logger logger = LoggerFactory.getLogger(MqttSampleClient.class);
 
     private MqttClient mqttClient = null;
+    private MqttClient targetMqttClient = null;
     private MqttConnectOptions connectionOptions = null;
 
     private static final int MQTT_VERSION = 4;
@@ -22,7 +23,7 @@ public class MqttSampleClient implements IMqttMessageListener{
         this.p = p;
 
         String serverURI = p.mqttUri;
-        String clientId = p.mqttClientId;
+        String clientId = "abc"+System.currentTimeMillis();
         String userName = p.mqttUserName;
         if (serverURI.isEmpty() || clientId.isEmpty() || userName.isEmpty()) {
             throw new IllegalArgumentException();
@@ -77,13 +78,15 @@ public class MqttSampleClient implements IMqttMessageListener{
 
     }
 
-    public void sendMsg(JSONObject jsonMsg){
-        if(mqttClient != null && jsonMsg != null){
+    public void sendMsg(JSONObject jsonMsg) throws MqttException {
+        targetMqttClient =new MqttClient(p.mqttUri, System.currentTimeMillis()+"qaz", new MemoryPersistence());
+        targetMqttClient.connect(connectionOptions);
+        if(targetMqttClient != null && jsonMsg != null){
             byte[] content = jsonMsg.toJSONString().getBytes();
             MqttMessage message =new MqttMessage(content);
             message.setQos(1);
             try {
-                mqttClient.publish(this.p.targetMqttTopic, message);
+                targetMqttClient.publish(this.p.targetMqttTopic, message);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
