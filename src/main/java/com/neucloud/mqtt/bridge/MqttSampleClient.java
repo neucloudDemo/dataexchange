@@ -48,7 +48,7 @@ public class MqttSampleClient implements IMqttMessageListener{
 
     public void connect() throws MqttException {
         mqttClient.connect(connectionOptions);
-        logger.error("mqtt  connect success !");
+        logger.info("mqtt  connect success !");
     }
 
     public void SubscribeMsg(String mqttTopic){
