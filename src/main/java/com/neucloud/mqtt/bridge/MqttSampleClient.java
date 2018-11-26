@@ -30,6 +30,7 @@ public class MqttSampleClient implements IMqttMessageListener{
         }
         MemoryPersistence persistence = new MemoryPersistence();
         try {
+            targetMqttClient =new MqttClient(p.mqttUri, System.currentTimeMillis()+"qaz", new MemoryPersistence());
             mqttClient = new MqttClient(serverURI, clientId, persistence);
             connectionOptions = new MqttConnectOptions();
             this.connectionOptions.setKeepAliveInterval(p.mqttKeepAliveInterval);
@@ -49,6 +50,7 @@ public class MqttSampleClient implements IMqttMessageListener{
 
     public void connect() throws MqttException {
         mqttClient.connect(connectionOptions);
+        targetMqttClient.connect(connectionOptions);
         logger.info("mqtt  connect success !");
     }
 
@@ -79,8 +81,6 @@ public class MqttSampleClient implements IMqttMessageListener{
     }
 
     public void sendMsg(JSONObject jsonMsg) throws MqttException {
-        targetMqttClient =new MqttClient(p.mqttUri, System.currentTimeMillis()+"qaz", new MemoryPersistence());
-        targetMqttClient.connect(connectionOptions);
         if(targetMqttClient != null && jsonMsg != null){
             byte[] content = jsonMsg.toJSONString().getBytes();
             MqttMessage message =new MqttMessage(content);
