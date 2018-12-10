@@ -6,12 +6,12 @@ STANDALONE  :   true
 
 mqtt
 
-1.  clientId
-2. userName
-3. password
-4. uri
-5.topic
-6.targetTopic
+1. MQTT_CLIENTID
+2. MQTT_USERNAME
+3. MQTT_PASSWORD
+4. MQTT_URI
+5. MQTT_TOPIC
+6. MQTT_TARGETTOPIC
  
 
 
